@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Una sorpresa para ti</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(
+                135deg,
+                #100d10,
+                #21151c,
+                #120e12
+            );
+
+            color: #f4e9e9;
+            font-family: Georgia, serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ESTRELLAS */
+
+        .estrella {
+            position: fixed;
+            color: #c5a46d;
+            opacity: 0.5;
+            animation: brillar 3s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes brillar {
+
+            from {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 0.9;
+                transform: scale(1.2);
+            }
+
+        }
+
+        /* CONTENEDORES PRINCIPALES */
+
+        .pantalla {
+            width: 100%;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        #fotografia,
+        #carta {
+            display: none;
+        }
+
+        /* PANTALLA INICIAL */
+
+        .contenido-inicio {
+            text-align: center;
+        }
+
+        .contenido-inicio h1 {
+            color: #d7b77d;
+            font-size: 35px;
+            font-weight: normal;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .contenido-inicio p {
+            color: #c8bfc2;
+            font-size: 16px;
+            margin-bottom: 35px;
+        }
+
+        /* SOBRE */
+
+        .sobre {
+            width: 230px;
+            height: 155px;
+
+            background: #651e32;
+
+            position: relative;
+            margin: 0 auto 35px;
+
+            cursor: pointer;
+
+            border-radius: 5px;
+
+            box-shadow:
+                0 0 25px rgba(0, 0, 0, 0.5),
+                0 0 25px rgba(173, 112, 77, 0.12);
+
+            transition: transform 0.3s ease;
+        }
+
+        .sobre:hover {
+            transform: scale(1.05);
+        }
+
+        .sobre::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 0;
+            height: 0;
+
+            border-left: 115px solid transparent;
+            border-right: 115px solid transparent;
+            border-top: 85px solid #873149;
+
+            z-index: 2;
+        }
+
+        .sobre::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: 0;
+            left: 0;
+
+            width: 0;
+            height: 0;
+
+            border-left: 115px solid #79243a;
+            border-right: 115px solid #79243a;
+            border-top: 80px solid transparent;
+
+            z-index: 1;
+        }
+
+        /* SELLO */
+
+        .sello {
+            position: absolute;
+
+            top: 55px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 42px;
+            height: 42px;
+
+            background: #c5a46d;
+            color: #542033;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 24px;
+
+            z-index: 3;
+
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* BOTONES */
+
+        button {
+            border: 1px solid #b99b6b;
+
+            background: transparent;
+            color: #d7b77d;
+
+            padding: 13px 27px;
+
+            font-size: 15px;
+            font-family: Georgia, serif;
+
+            cursor: pointer;
+
+            border-radius: 30px;
+
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #b99b6b;
+            color: #21151c;
+        }
+
+        /* FOTOGRAFÍA */
+
+        .contenedor-foto {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .contenedor-foto h2 {
+            color: #d7b77d;
+            font-weight: normal;
+            font-size: 30px;
+            margin-bottom: 25px;
+        }
+
+        .foto {
+            width: 100%;
+            max-width: 350px;
+            max-height: 430px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+
+            border: 2px solid #a98a5c;
+
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+
+            margin-bottom: 25px;
+        }
+
+        /* CARTA */
+
+        .contenedor-carta {
+            width: 100%;
+            max-width: 650px;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            border: 1px solid rgba(197, 164, 109, 0.5);
+
+            border-radius: 12px;
+
+            padding: 40px 35px;
+
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.35);
+        }
+
+        .contenedor-carta h2 {
+            text-align: center;
+
+            color: #d7b77d;
+
+            font-weight: normal;
+
+            font-size: 32px;
+
+            margin-bottom: 30px;
+        }
+
+        .mensaje {
+            color: #e5dadd;
+
+            font-size: 17px;
+
+            line-height: 1.9;
+
+            white-space: pre-line;
+
+            text-align: center;
+        }
+
+        .firma {
+            color: #d7b77d;
+
+            text-align: center;
+
+            font-size: 19px;
+
+            margin-top: 30px;
+        }
+
+        /* REPRODUCTOR */
+
+        .reproductor {
+            display: none;
+
+            position: fixed;
+
+            bottom: 20px;
+            right: 20px;
+
+            z-index: 10;
+
+            background: rgba(35, 22, 29, 0.95);
+
+            border: 1px solid #a98a5c;
+
+            border-radius: 30px;
+
+            padding: 10px 17px;
+
+            align-items: center;
+            gap: 12px;
+
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .reproductor button {
+            padding: 7px 12px;
+            font-size: 14px;
+        }
+
+        .reproductor span {
+            color: #d7b77d;
+            font-size: 13px;
+        }
+
+        .reproductor input {
+            width: 80px;
+            accent-color: #c5a46d;
+            cursor: pointer;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 600px) {
+
+            .contenido-inicio h1 {
+                font-size: 28px;
+            }
+
+            .contenedor-carta {
+                padding: 30px 20px;
+            }
+
+            .contenedor-carta h2 {
+                font-size: 27px;
+            }
+
+            .mensaje {
+                font-size: 15px;
+            }
+
+            .reproductor {
+                bottom: 12px;
+                right: 50%;
+                transform: translateX(50%);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ESTRELLAS -->
+
+    <div id="estrellas"></div>
+
+
+    <!-- PANTALLA INICIAL -->
+
+    <section class="pantalla" id="inicio">
+
+        <div class="contenido-inicio">
+
+            <h1>Una pequeña sorpresa</h1>
+
+            <p>Hay algo que quiero compartir contigo...</p>
+
+            <div class="sobre" onclick="abrirSobre()">
+
+                <div class="sello">
+                    ✦
+                </div>
+
+            </div>
+
+            <button onclick="abrirSobre()">
+                Abrir tu sorpresa 💌
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- PANTALLA DE FOTOGRAFÍA -->
+
+    <section class="pantalla" id="fotografia">
+
+        <div class="contenedor-foto">
+
+            <h2>Un día para recordar</h2>
+
+            <img
+                src="cumpleanos.jpeg"
+                alt="Fotografía especial"
+                class="foto"
+            >
+
+            <br>
+
+            <button onclick="mostrarCarta()">
+                Continuar ✨
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- PANTALLA DE LA CARTA -->
+
+    <section class="pantalla" id="carta">
+
+        <div class="contenedor-carta">
+
+            <h2>🥳¡Feliz cumpleaños!🎂</h2>
+
+            <div class="mensaje">
+
+Hoy es un día especial y no quería
+dejarlo pasar sin dedicarte unas palabras.
+
+Espero que tengas un cumpleaños muy bonito,
+que disfrutes mucho tu día y que estés
+rodeado de personas que te quieren
+y te hacen feliz.
+
+Espero que este nuevo año de vida venga
+lleno de cosas buenas, oportunidades,
+experiencias bonitas y muchos momentos
+que te hagan sonreír.
+
+Que puedas cumplir cada uno de tus propósitos,
+alcanzar aquello que tanto deseas y que nunca
+te falten motivos para seguir adelante.
+
+Disfruta mucho tu día, que la pases muy bonito.
+
+¡Feliz cumpleaños! ❤️
+
+            </div>
+
+            <div class="firma">
+                Con mucho cariño. ✨
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- REPRODUCTOR DE MÚSICA -->
+
+    <div class="reproductor" id="reproductor">
+
+        <button onclick="controlarMusica()" id="botonMusica">
+            ❚❚
+        </button>
+
+        <span>Música</span>
+
+        <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.5"
+            oninput="cambiarVolumen(this.value)"
+        >
+
+    </div>
+
+
+    <!-- ARCHIVO DE AUDIO -->
+
+    <audio id="musica" loop preload="auto">
+
+        <source
+            src="Indila - Love Story (Piano Cover) - (320 Kbps).mp3"
+            type="audio/mpeg"
+        >
+
+    </audio>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        // ABRIR EL SOBRE Y COMENZAR LA MÚSICA
+
+        function abrirSobre() {
+
+            document.getElementById("inicio").style.display = "none";
+
+            document.getElementById("fotografia").style.display = "flex";
+
+            document.getElementById("reproductor").style.display = "flex";
+
+            const musica = document.getElementById("musica");
+
+            musica.volume = 0.5;
+
+            musica.play()
+                .then(() => {
+
+                    document.getElementById("botonMusica").textContent = "❚❚";
+
+                })
+                .catch(error => {
+
+                    console.log("No se pudo iniciar la música:", error);
+
+                });
+
+        }
+
+
+        // MOSTRAR LA CARTA
+
+        function mostrarCarta() {
+
+            document.getElementById("fotografia").style.display = "none";
+
+            document.getElementById("carta").style.display = "flex";
+
+        }
+
+
+        // PAUSAR O REANUDAR LA MÚSICA
+
+        function controlarMusica() {
+
+            const musica = document.getElementById("musica");
+
+            const boton = document.getElementById("botonMusica");
+
+            if (musica.paused) {
+
+                musica.play();
+
+                boton.textContent = "❚❚";
+
+            } else {
+
+                musica.pause();
+
+                boton.textContent = "▶";
+
+            }
+
+        }
+
+
+        // CONTROLAR EL VOLUMEN
+
+        function cambiarVolumen(valor) {
+
+            const musica = document.getElementById("musica");
+
+            musica.volume = valor;
+
+        }
+
+
+        // CREAR ESTRELLAS
+
+        const contenedorEstrellas = document.getElementById("estrellas");
+
+        for (let i = 0; i < 45; i++) {
+
+            const estrella = document.createElement("div");
+
+            estrella.classList.add("estrella");
+
+            estrella.textContent = "✦";
+
+            estrella.style.left = Math.random() * 100 + "vw";
+
+            estrella.style.top = Math.random() * 100 + "vh";
+
+            estrella.style.fontSize = (Math.random() * 10 + 5) + "px";
+
+            estrella.style.animationDelay = Math.random() * 3 + "s";
+
+            contenedorEstrellas.appendChild(estrella);
+
+        }
+
+    </script>
+
+</body>
+
+</html>
